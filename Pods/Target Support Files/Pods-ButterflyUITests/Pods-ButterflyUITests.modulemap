@@ -1,0 +1,6 @@
+framework module Pods_ButterflyUITests {
+  umbrella header "Pods-ButterflyUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
