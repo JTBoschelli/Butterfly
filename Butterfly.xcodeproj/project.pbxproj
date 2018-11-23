@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0735422974DBF48ECF2455EE /* Pods_ButterflyUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E96103ACD8E7F1990A1F280 /* Pods_ButterflyUITests.framework */; };
+		0897940321A895A70021273F /* PublicArt.json in Resources */ = {isa = PBXBuildFile; fileRef = 0897940221A895A70021273F /* PublicArt.json */; };
+		0897940521A896D30021273F /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0897940421A896D30021273F /* MapViewController.swift */; };
+		0897940721A89CE60021273F /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0897940621A89CE60021273F /* Event.swift */; };
 		08D19A20219A41A200ED7D02 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D19A1F219A41A200ED7D02 /* AppDelegate.swift */; };
 		08D19A22219A41A200ED7D02 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D19A21219A41A200ED7D02 /* ViewController.swift */; };
 		08D19A25219A41A200ED7D02 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08D19A23219A41A200ED7D02 /* Main.storyboard */; };
@@ -38,6 +41,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0897940221A895A70021273F /* PublicArt.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PublicArt.json; sourceTree = "<group>"; };
+		0897940421A896D30021273F /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		0897940621A89CE60021273F /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		08D19A1C219A41A200ED7D02 /* Butterfly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Butterfly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08D19A1F219A41A200ED7D02 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		08D19A21219A41A200ED7D02 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +122,7 @@
 		08D19A1E219A41A200ED7D02 /* Butterfly */ = {
 			isa = PBXGroup;
 			children = (
+				0897940221A895A70021273F /* PublicArt.json */,
 				0CBDE35521A26E420023B666 /* GoogleService-Info.plist */,
 				08D19A1F219A41A200ED7D02 /* AppDelegate.swift */,
 				08D19A21219A41A200ED7D02 /* ViewController.swift */,
@@ -123,6 +130,8 @@
 				08D19A26219A41A300ED7D02 /* Assets.xcassets */,
 				08D19A28219A41A300ED7D02 /* LaunchScreen.storyboard */,
 				08D19A2B219A41A300ED7D02 /* Info.plist */,
+				0897940421A896D30021273F /* MapViewController.swift */,
+				0897940621A89CE60021273F /* Event.swift */,
 			);
 			path = Butterfly;
 			sourceTree = "<group>";
@@ -280,6 +289,7 @@
 				0CBDE35621A26E420023B666 /* GoogleService-Info.plist in Resources */,
 				08D19A27219A41A300ED7D02 /* Assets.xcassets in Resources */,
 				08D19A25219A41A200ED7D02 /* Main.storyboard in Resources */,
+				0897940321A895A70021273F /* PublicArt.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,15 +315,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-Butterfly-checkManifestLockResult.txt",
 			);
@@ -327,15 +333,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-ButterflyUITests-checkManifestLockResult.txt",
 			);
@@ -349,15 +351,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-ButterflyTests-checkManifestLockResult.txt",
 			);
@@ -371,8 +369,6 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Butterfly/Pods-Butterfly-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
@@ -380,8 +376,6 @@
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
@@ -399,7 +393,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0897940721A89CE60021273F /* Event.swift in Sources */,
 				08D19A22219A41A200ED7D02 /* ViewController.swift in Sources */,
+				0897940521A896D30021273F /* MapViewController.swift in Sources */,
 				08D19A20219A41A200ED7D02 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
