@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/jenniferstevens/Desktop/CSE 438S/Butterfly/Butterfly/CreateEventViewController.swift">
+   </FileRef>
+   <FileRef
       location = "group:Butterfly.xcodeproj">
    </FileRef>
    <FileRef
