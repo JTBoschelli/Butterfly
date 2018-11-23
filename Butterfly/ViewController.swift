@@ -49,7 +49,15 @@ class ViewController: UIViewController, LoginButtonDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-
+        let loginButton = LoginButton(readPermissions: [ .publicProfile ])
+        loginButton.delegate = self
+        loginButton.center = view.center
+        
+        view.addSubview(loginButton)
+        
+//        if let accessToken = AccessToken.current{
+//            print("Hello")
+//        }
     }
 
     override func didReceiveMemoryWarning() {
