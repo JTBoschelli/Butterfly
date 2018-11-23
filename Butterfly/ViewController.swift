@@ -7,12 +7,57 @@
 //
 
 import UIKit
+import FirebaseDatabase
+import FacebookLogin
+import FacebookCore
+import FirebaseAuth
+import FBSDKCoreKit
+import FBSDKLoginKit
 
-class ViewController: UIViewController {
+
+class ViewController: UIViewController, LoginButtonDelegate {
+    func loginButtonDidCompleteLogin(_ loginButton: LoginButton, result: LoginResult) {
+        print("---LOGIN COMPLETE---")
+        let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+        print("CREDENTIAL: \(credential)")
+        Auth.auth().signInAndRetrieveData(with: credential) { (authResult, error) in
+            if let error = error {
+                print(error)
+                return
+            }
+            var ref: DatabaseReference!
+            
+            ref = Database.database().reference()
+            let user = Auth.auth().currentUser
+            if let user = user {
+                // The user's ID, unique to the Firebase project.
+                // Do NOT use this value to authenticate with your backend server,
+                // if you have one. Use getTokenWithCompletion:completion: instead.
+                let uid = user.uid
+                let name = user.displayName
+                ref.child("users").child(uid).setValue(["name": name!])
+            }
+        }
+    }
+    
+    func loginButtonDidLogOut(_ loginButton: LoginButton) {
+        print("----LOGOUT COMPLETE---")
+    }
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        let loginButton = LoginButton(readPermissions: [ .publicProfile ])
+        loginButton.delegate = self
+        loginButton.center = view.center
+        
+        view.addSubview(loginButton)
+        
+//        if let accessToken = AccessToken.current{
+//            print("Hello")
+//        }
     }
 
     override func didReceiveMemoryWarning() {

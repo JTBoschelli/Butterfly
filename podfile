@@ -8,6 +8,11 @@ target 'Butterfly' do
   # Pods for Butterfly
   pod 'Firebase/Core'
   pod 'Firebase/Database'
+  pod 'Firebase/Auth'
+  pod 'FBSDKLoginKit'
+  pod 'FacebookCore'
+  pod 'FacebookLogin'
+  pod 'FacebookShare'  
 
   target 'ButterflyTests' do
     inherit! :search_paths
