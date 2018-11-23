@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class CreateEventViewController: UIViewController {
 
@@ -17,7 +18,6 @@ class CreateEventViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        eventDatePicker.timeZone = NSTimeZone.local
         // Do any additional setup after loading the view.
     }
 
@@ -28,13 +28,45 @@ class CreateEventViewController: UIViewController {
     
     
     @IBAction func createEvent(_ sender: Any) {
+        var eventName:NSString
+        var eventDate:NSString
+        var eventLongitude:NSNumber
+        var eventLatitude:NSNumber
+        var isOpen:NSString
+        
         let title = eventTitle.text
-        let date = eventDatePicker.date
-        let lat = eventLat.text
-        let long = eventLong.text
-        let isOpen = eventOpen.isOn
-        print(isOpen)
+        if title != ""{
+            print("valid")
+            eventName = String(title!) as NSString
+        }
+        else{
+            print("invalid")
+        }
+        var date = eventDatePicker.date
+        date.addTimeInterval(-6*60*60)
         print(date)
+        eventDate = date.description as NSString
+
+        let lat = eventLat.text
+        if let latitude = Double(lat!){
+            eventLatitude = latitude as NSNumber
+        }
+        else{
+            print("invalid")
+        }
+        let long = eventLong.text
+        if let longitude = Double(long!){
+            eventLongitude = longitude as NSNumber
+        }
+        else{
+            print("invalid")
+        }
+        
+        
+        
+        var ref: DatabaseReference!
+        
+        ref = Database.database().reference()
     }
     
     
