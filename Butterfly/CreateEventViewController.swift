@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 class CreateEventViewController: UIViewController {
 
@@ -18,6 +19,7 @@ class CreateEventViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Create Event"
         // Do any additional setup after loading the view.
     }
 
@@ -32,15 +34,21 @@ class CreateEventViewController: UIViewController {
         var eventDate:NSString
         var eventLongitude:NSNumber
         var eventLatitude:NSNumber
-        var isOpen:NSString
         
         let title = eventTitle.text
         if title != ""{
-            print("valid")
             eventName = String(title!) as NSString
         }
         else{
-            print("invalid")
+            //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+            let alertController = UIAlertController(title: "ERROR", message: "Must enter a title for your event", preferredStyle: .alert)
+            
+            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(defaultAction)
+            
+            present(alertController, animated: true, completion: nil)
+            //End of Citation
+            return
         }
         var date = eventDatePicker.date
         date.addTimeInterval(-6*60*60)
@@ -52,21 +60,112 @@ class CreateEventViewController: UIViewController {
             eventLatitude = latitude as NSNumber
         }
         else{
-            print("invalid")
+            //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+
+            let alertController = UIAlertController(title: "ERROR", message: "Must enter a proper coordinate value", preferredStyle: .alert)
+            
+            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(defaultAction)
+            
+            present(alertController, animated: true, completion: nil)
+            //End of Citation
+            return
         }
         let long = eventLong.text
         if let longitude = Double(long!){
             eventLongitude = longitude as NSNumber
         }
         else{
-            print("invalid")
+            //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+
+            let alertController = UIAlertController(title: "ERROR", message: "Must enter a proper coordinate value", preferredStyle: .alert)
+            
+            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(defaultAction)
+            
+            present(alertController, animated: true, completion: nil)
+            //End of Citation
+            return
         }
         
-        
-        
-        var ref: DatabaseReference!
-        
-        ref = Database.database().reference()
+        if (eventOpen.isOn){
+            let user = Auth.auth().currentUser
+            if let eventCreator = user{
+                let uid = eventCreator.uid
+                let creator = eventCreator.displayName! as NSString
+                var ref: DatabaseReference!
+                ref = Database.database().reference()
+                
+                //Code to update child values taken from firebase docs on https://firebase.google.com/docs/database/ios/read-and-write
+                let key = ref.child("events").childByAutoId().key
+                let eventDetails:[String : AnyObject] = ["Title": eventName, "Date": eventDate, "Creator": creator, "Latitude": eventLatitude, "Longitude": eventLongitude, "Open": "true" as NSString]
+                
+                let childUpdates:[String: AnyObject] = ["/events/\(key!)": eventDetails as AnyObject,
+                                    "/users/\(uid)/events-created/\(key!)/": "true" as NSString]
+                ref.updateChildValues(childUpdates){
+                    //End of Citation
+                    (error:Error?, ref:DatabaseReference) in
+                    if let error = error {
+                        print("Data could not be saved: \(error).")
+                    } else {
+                        //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+                        
+                        let alertController = UIAlertController(title: "Success!", message: "Event Added Successfully", preferredStyle: .alert)
+                        
+                        let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alertController.addAction(defaultAction)
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                        self.eventTitle.text = ""
+                        self.eventLat.text = ""
+                        self.eventLong.text = ""
+                        self.eventDatePicker.date = NSDate() as Date
+                        //End of Citation
+                    }
+                }
+                
+                
+            }
+            else{
+                //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+                
+                let alertController = UIAlertController(title: "ERROR", message: "Must be logged in to create event", preferredStyle: .alert)
+                
+                let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(defaultAction)
+                
+                present(alertController, animated: true, completion: nil)
+                //End of Citation
+                return
+            }
+            
+        }
+        else{
+            let user = Auth.auth().currentUser
+            if let eventCreator = user{
+                let uid = eventCreator.uid
+                let creator = eventCreator.displayName! as NSString
+                var ref: DatabaseReference!
+                ref = Database.database().reference()
+                print(creator)
+                let eventDetails:[String : AnyObject] = ["Title": eventName, "Date": eventDate, "Creator": creator, "Latitude": eventLatitude, "Longitude": eventLongitude, "Open": "false" as NSString]
+                let detailedVC = EventInviteViewController()
+                detailedVC.event = eventDetails
+                navigationController?.pushViewController(detailedVC, animated: true)
+            }
+            else{
+                //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+                
+                let alertController = UIAlertController(title: "ERROR", message: "Must be logged in to create event", preferredStyle: .alert)
+                
+                let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(defaultAction)
+                
+                present(alertController, animated: true, completion: nil)
+                //End of Citation
+                return
+            }
+        }
     }
     
     
