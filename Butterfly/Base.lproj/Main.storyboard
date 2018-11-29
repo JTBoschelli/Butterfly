@@ -57,6 +57,23 @@
             </objects>
             <point key="canvasLocation" x="1020" y="-612.14392803598207"/>
         </scene>
+        <!--Login-->
+        <scene sceneID="xrc-MR-exH">
+            <objects>
+                <viewController id="LE0-sF-AJz" customClass="ViewController" customModule="Butterfly" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mjm-BS-Rmd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="yw4-KO-riF"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Login" id="zZ4-zj-avf"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DM0-R4-Ejm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-537" y="199"/>
+        </scene>
         <!--Create Event View Controller-->
         <scene sceneID="GZ4-aZ-GNS">
             <objects>
@@ -187,6 +204,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
+                        <segue destination="LE0-sF-AJz" kind="relationship" relationship="viewControllers" id="zbB-nu-ayE"/>
                         <segue destination="y24-mf-Gxg" kind="relationship" relationship="viewControllers" id="tmv-gd-A4m"/>
                         <segue destination="C75-pb-Bzy" kind="relationship" relationship="viewControllers" id="rAu-8a-ktv"/>
                         <segue destination="bxO-fW-Ohu" kind="relationship" relationship="viewControllers" id="ABn-uk-Fd7"/>
