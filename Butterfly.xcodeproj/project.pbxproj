@@ -18,7 +18,6 @@
 		08D19A2A219A41A300ED7D02 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08D19A28219A41A300ED7D02 /* LaunchScreen.storyboard */; };
 		08D19A35219A41A400ED7D02 /* ButterflyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D19A34219A41A400ED7D02 /* ButterflyTests.swift */; };
 		08D19A40219A41A400ED7D02 /* ButterflyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D19A3F219A41A400ED7D02 /* ButterflyUITests.swift */; };
-		0C408D3B21A88CDA00620219 /* Butterfly in Sources */ = {isa = PBXBuildFile; fileRef = 0C408D3A21A88CDA00620219 /* Butterfly */; };
 		0C61D2CB21AA3A7A00D0A681 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C61D2CA21AA3A7A00D0A681 /* CreateEventViewController.swift */; };
 		0C61D2CD21AA5F2500D0A681 /* EventInviteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C61D2CC21AA5F2500D0A681 /* EventInviteViewController.swift */; };
 		0CBDE35621A26E420023B666 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0CBDE35521A26E420023B666 /* GoogleService-Info.plist */; };
@@ -61,7 +60,6 @@
 		08D19A3B219A41A400ED7D02 /* ButterflyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ButterflyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		08D19A3F219A41A400ED7D02 /* ButterflyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButterflyUITests.swift; sourceTree = "<group>"; };
 		08D19A41219A41A400ED7D02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0C408D3A21A88CDA00620219 /* Butterfly */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Butterfly; path = /Users/jarrydnissenbaum/Desktop/CSE438/Butterfly/Butterfly; sourceTree = "<absolute>"; };
 		0C61D2CA21AA3A7A00D0A681 /* CreateEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		0C61D2CC21AA5F2500D0A681 /* EventInviteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInviteViewController.swift; sourceTree = "<group>"; };
 		0CBDE35521A26E420023B666 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -133,7 +131,6 @@
 				0C61D2CA21AA3A7A00D0A681 /* CreateEventViewController.swift */,
 				0C61D2CC21AA5F2500D0A681 /* EventInviteViewController.swift */,
 				0897940221A895A70021273F /* PublicArt.json */,
-				0C408D3A21A88CDA00620219 /* Butterfly */,
 				0CBDE35521A26E420023B666 /* GoogleService-Info.plist */,
 				08D19A1F219A41A200ED7D02 /* AppDelegate.swift */,
 				08D19A21219A41A200ED7D02 /* ViewController.swift */,
@@ -428,7 +425,6 @@
 				0C61D2CB21AA3A7A00D0A681 /* CreateEventViewController.swift in Sources */,
 				08D19A20219A41A200ED7D02 /* AppDelegate.swift in Sources */,
 				F2BAA84B21A8A68600659DEC /* EventDetailViewController.swift in Sources */,
-				0C408D3B21A88CDA00620219 /* Butterfly in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
