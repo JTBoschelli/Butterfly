@@ -18,7 +18,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell")! as UITableViewCell
         cell.textLabel!.text = eventsArray[indexPath.row].title
         return cell
     }
@@ -26,6 +26,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        eventsTable.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
         eventsTable.dataSource = self
         // Do any additional setup after loading the view.
     }
