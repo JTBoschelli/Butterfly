@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EventsTableViewController: UIViewController, UITableViewDataSource {
+class EventsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var eventsArray: [Event] = []
     @IBOutlet weak var eventsTable: UITableView!
@@ -28,6 +28,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource {
         super.viewDidLoad()
         eventsTable.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
         eventsTable.dataSource = self
+        eventsTable.delegate = self
         // Do any additional setup after loading the view.
     }
 
@@ -36,7 +37,10 @@ class EventsTableViewController: UIViewController, UITableViewDataSource {
         // Dispose of any resources that can be recreated.
     }
     
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "detailSegue", sender: self)
+    }
+    
     /*
     // MARK: - Navigation
 

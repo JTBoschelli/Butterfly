@@ -35,7 +35,7 @@
                     <navigationItem key="navigationItem" id="RIQ-9C-lBH"/>
                     <connections>
                         <outlet property="eventsTable" destination="RYs-gh-AQu" id="Zm0-nH-8Bl"/>
-                        <segue destination="C75-pb-Bzy" kind="show" id="f8p-Qh-pQa"/>
+                        <segue destination="C75-pb-Bzy" kind="show" identifier="detailSegue" id="f8p-Qh-pQa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BUc-J4-etQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
