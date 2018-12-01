@@ -106,7 +106,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, date: value["Date"]! as! String, coordinate: coordinate)
                 self.mapView.addAnnotation(newEvent)
                 self.eventsArray.append(newEvent)
-                
 
             }
             
