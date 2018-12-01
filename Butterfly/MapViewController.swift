@@ -91,11 +91,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var mapView: MKMapView!
     
     
-//    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
-//                 calloutAccessoryControlTapped control: UIControl) {
-//        let location = view.annotation as! Event
-//        performSegue(withIdentifier: <#T##String#>, sender: view)
-//    }
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
+                 calloutAccessoryControlTapped control: UIControl) {
+      //  let location = view.annotation as! Event
+        performSegue(withIdentifier: "events", sender: view)
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destination = segue.destination as? EventDetailViewController
+      //  destination.
+        
+    }
     
     
     func loadInitialData() {

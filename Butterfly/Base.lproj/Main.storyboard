@@ -219,6 +219,7 @@
                     <tabBarItem key="tabBarItem" title="Map" image="map-pin" id="s6O-Wh-Ma1"/>
                     <connections>
                         <outlet property="mapView" destination="dwP-l4-in9" id="Wvw-sf-9IP"/>
+                        <segue destination="C75-pb-Bzy" kind="show" identifier="events" id="Hb3-OK-jvb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xsn-DB-mjp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -291,4 +292,7 @@
         <image name="map-pin" width="30" height="30"/>
         <image name="text-pic-left" width="30" height="30"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Hb3-OK-jvb"/>
+    </inferredMetricsTieBreakers>
 </document>
