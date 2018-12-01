@@ -29,6 +29,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
         eventsTable.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
         eventsTable.dataSource = self
         eventsTable.delegate = self
+        loadInitialData()
         // Do any additional setup after loading the view.
     }
 
@@ -39,6 +40,26 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "detailSegue", sender: self)
+    }
+    
+    func loadInitialData() {
+        // 1
+        guard let fileName = Bundle.main.path(forResource: "PublicArt", ofType: "json")
+            else { return }
+        let optionalData = try? Data(contentsOf: URL(fileURLWithPath: fileName))
+        
+        guard
+            let data = optionalData,
+            // 2
+            let json = try? JSONSerialization.jsonObject(with: data),
+            // 3
+            let dictionary = json as? [String: Any],
+            // 4
+            let events = dictionary["data"] as? [[Any]]
+            else { return }
+        // 5
+        let validEvents = events.compactMap { Event(json: $0) }
+        eventsArray.append(contentsOf: validEvents)
     }
     
     /*
