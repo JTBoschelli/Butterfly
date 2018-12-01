@@ -9,12 +9,17 @@
 import Foundation
 import MapKit
 import UIKit
+import FirebaseDatabase
+import FirebaseAuth
+
 
 class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     var eventsArray: [Event] = []
     var location: CLLocation? = nil
     var locationManager:CLLocationManager!
+    var uid: String!
+    var displayName: String!
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -28,7 +33,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()
         
         if CLLocationManager.locationServicesEnabled() {
             //locationManager.startUpdatingHeading()
@@ -58,9 +63,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         mapView.delegate = self
-        
+        let user = Auth.auth().currentUser
+        if let user = user {
+            // The user's ID, unique to the Firebase project.
+            // Do NOT use this value to authenticate with your backend server,
+            // if you have one. Use getTokenWithCompletion:completion: instead.
+            uid = user.uid
+            displayName = user.displayName
+        }
+
         loadInitialData()
-        mapView.addAnnotations(eventsArray)
+
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -77,23 +91,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var mapView: MKMapView!
     
     func loadInitialData() {
-        // 1
-        guard let fileName = Bundle.main.path(forResource: "PublicArt", ofType: "json")
-            else { return }
-        let optionalData = try? Data(contentsOf: URL(fileURLWithPath: fileName))
+        var ref: DatabaseReference!
         
-        guard
-            let data = optionalData,
-            // 2
-            let json = try? JSONSerialization.jsonObject(with: data),
-            // 3
-            let dictionary = json as? [String: Any],
-            // 4
-            let events = dictionary["data"] as? [[Any]]
-            else { return }
-        // 5
-        let validEvents = events.compactMap { Event(json: $0) }
-        eventsArray.append(contentsOf: validEvents)
+        ref = Database.database().reference()
+        ref.child("events").observeSingleEvent(of: .value, with: {
+            snapshot in
+            print("\(snapshot.key) -> \(String(describing: snapshot.value))")
+            let someData = snapshot.value! as! Dictionary<String, NSDictionary>
+            
+            for (key,value) in someData {
+                let lat:Double = value["Latitude"]! as! Double
+                let long:Double = value["Longitude"]! as! Double
+                let coordinate = CLLocationCoordinate2DMake(lat, long)
+                let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, date: value["Date"]! as! String, coordinate: coordinate)
+                self.mapView.addAnnotation(newEvent)
+                self.eventsArray.append(newEvent)
+                
+
+            }
+            
+        })
+        
     }
     
 
