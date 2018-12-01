@@ -58,8 +58,8 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
             let events = dictionary["data"] as? [[Any]]
             else { return }
         // 5
-        let validEvents = events.compactMap { Event(json: $0) }
-        eventsArray.append(contentsOf: validEvents)
+//        let validEvents = events.compactMap { Event(json: $0) }
+//        eventsArray.append(contentsOf: validEvents)
     }
     
     /*
