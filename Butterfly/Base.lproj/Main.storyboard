@@ -99,7 +99,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="yw4-KO-riF"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Login" id="zZ4-zj-avf"/>
+                    <tabBarItem key="tabBarItem" title="Login" image="home" id="zZ4-zj-avf"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DM0-R4-Ejm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -200,7 +200,7 @@
             </objects>
             <point key="canvasLocation" x="1676" y="1046.6266866566718"/>
         </scene>
-        <!--Item-->
+        <!--Map-->
         <scene sceneID="hvD-6E-KjS">
             <objects>
                 <viewController id="bxO-fW-Ohu" customClass="MapViewController" customModule="Butterfly" customModuleProvider="target" sceneMemberID="viewController">
@@ -216,7 +216,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="a0j-OL-Nbq"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="s6O-Wh-Ma1"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="map-pin" id="s6O-Wh-Ma1"/>
                     <connections>
                         <outlet property="mapView" destination="dwP-l4-in9" id="Wvw-sf-9IP"/>
                     </connections>
@@ -246,11 +246,11 @@
             </objects>
             <point key="canvasLocation" x="280.80000000000001" y="199.25037481259372"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Create-->
         <scene sceneID="5T9-7b-1QD">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="y24-mf-Gxg" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="recents" id="uBy-xm-YRp"/>
+                    <tabBarItem key="tabBarItem" title="Create" image="text-pic-left" id="uBy-xm-YRp"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="QeV-5z-HlG">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -265,11 +265,11 @@
             </objects>
             <point key="canvasLocation" x="736.79999999999995" y="1046.6266866566718"/>
         </scene>
-        <!--Item-->
+        <!--Events-->
         <scene sceneID="hbW-gH-5wk">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="VYs-9C-xwI" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="PDe-xb-CDe"/>
+                    <tabBarItem key="tabBarItem" title="Events" image="calendar" id="PDe-xb-CDe"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="7de-bW-OBC">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -285,4 +285,10 @@
             <point key="canvasLocation" x="154.40000000000001" y="-558.17091454272872"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="calendar" width="29" height="30"/>
+        <image name="home" width="30" height="30"/>
+        <image name="map-pin" width="30" height="30"/>
+        <image name="text-pic-left" width="30" height="30"/>
+    </resources>
 </document>
