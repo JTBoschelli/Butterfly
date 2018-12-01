@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 class EventInviteViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -74,10 +75,13 @@ class EventInviteViewController: UIViewController, UITableViewDelegate, UITableV
         
         let eventCreator = event["Creator"]
         
+        let eventCreatorId = Auth.auth().currentUser!.uid
+        
         var inviteList:[String:String] = [:]
         
         for i in 0 ..< selectedUsers.count{
             inviteList[selectedUsers[i]] = "true"
+            
         }
         
         event["invite-list"] = inviteList as AnyObject
@@ -87,7 +91,7 @@ class EventInviteViewController: UIViewController, UITableViewDelegate, UITableV
         let key = ref.child("events").childByAutoId().key
         
         let childUpdates:[String: AnyObject] = ["/events/\(key!)": event as AnyObject,
-                                                "/users/\(eventCreator!)/events-created/\(key!)/": "true" as NSString]
+                                                "/users/\(eventCreatorId)/events-created/\(key!)/": "true" as NSString]
         ref.updateChildValues(childUpdates){
             //End of Citation
             (error:Error?, ref:DatabaseReference) in
