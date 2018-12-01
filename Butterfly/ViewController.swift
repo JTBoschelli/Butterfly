@@ -44,6 +44,12 @@ class ViewController: UIViewController, LoginButtonDelegate {
     
     func loginButtonDidLogOut(_ loginButton: LoginButton) {
         print("----LOGOUT COMPLETE---")
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
     }
     
     
