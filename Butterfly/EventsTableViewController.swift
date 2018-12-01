@@ -75,14 +75,25 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
                 let long:Double = value["Longitude"]! as! Double
                 let coordinate = CLLocationCoordinate2DMake(lat, long)
                 let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, date: value["Date"]! as! String, coordinate: coordinate)
-                self.eventsArray.append(newEvent)
-                
+                let open:String = value["Open"]! as! String
+                if(open == "true"){
+                    self.eventsArray.append(newEvent)
+                }
+                else{
+                    let invite_list:[String:String] = value["invite-list"]! as! [String:String]
+                    for invite in invite_list{
+                        if(invite.key == self.uid){
+                            self.eventsArray.append(newEvent)
+                        }
+                    }
+                }
             }
             self.eventsTable.reloadData()
-            
         })
         
     }
+    
+    
     
     /*
      // MARK: - Navigation
