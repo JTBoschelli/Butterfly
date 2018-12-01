@@ -48,10 +48,10 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
             uid = user.uid
             displayName = user.displayName
         }
-       
-       
+        
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -62,33 +62,35 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func loadInitialData() {
-        // 1
-        guard let fileName = Bundle.main.path(forResource: "PublicArt", ofType: "json")
-            else { return }
-        let optionalData = try? Data(contentsOf: URL(fileURLWithPath: fileName))
+        var ref: DatabaseReference!
         
-        guard
-            let data = optionalData,
-            // 2
-            let json = try? JSONSerialization.jsonObject(with: data),
-            // 3
-            let dictionary = json as? [String: Any],
-            // 4
-            let events = dictionary["data"] as? [[Any]]
-            else { return }
-        // 5
-//        let validEvents = events.compactMap { Event(json: $0) }
-//        eventsArray.append(contentsOf: validEvents)
+        ref = Database.database().reference()
+        ref.child("events").observeSingleEvent(of: .value, with: {
+            snapshot in
+            print("\(snapshot.key) -> \(String(describing: snapshot.value))")
+            let someData = snapshot.value! as! Dictionary<String, NSDictionary>
+            
+            for (_,value) in someData {
+                let lat:Double = value["Latitude"]! as! Double
+                let long:Double = value["Longitude"]! as! Double
+                let coordinate = CLLocationCoordinate2DMake(lat, long)
+                let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, date: value["Date"]! as! String, coordinate: coordinate)
+                self.eventsArray.append(newEvent)
+                
+            }
+            self.eventsTable.reloadData()
+            
+        })
+        
     }
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
