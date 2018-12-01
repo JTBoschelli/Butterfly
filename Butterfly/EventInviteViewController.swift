@@ -109,6 +109,7 @@ class EventInviteViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userArray.count
     }

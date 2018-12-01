@@ -38,6 +38,8 @@ class ViewController: UIViewController, LoginButtonDelegate {
                 ref.child("users").child(uid).setValue(["name": name!])
             }
         }
+        
+       
     }
     
     func loginButtonDidLogOut(_ loginButton: LoginButton) {
