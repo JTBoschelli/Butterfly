@@ -59,8 +59,10 @@ class ViewController: UIViewController, LoginButtonDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         let loginButton = LoginButton(readPermissions: [ .publicProfile ])
         loginButton.delegate = self
-        loginButton.center = view.center
-        
+//        loginButton.center = view.center
+        loginButton.frame.origin.y = 20
+        loginButton.frame.origin.x = self.view.frame.width/2 - loginButton.frame.width
+     //   loginButton.frame.origin.x = view.centerXAnchor.
         view.addSubview(loginButton)
         
 //        if let accessToken = AccessToken.current{

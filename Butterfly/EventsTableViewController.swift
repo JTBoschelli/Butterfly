@@ -6,12 +6,18 @@
 //  Copyright © 2018 Justin Boschelli. All rights reserved.
 //
 
+import Foundation
 import UIKit
+import MapKit
+import FirebaseDatabase
+import FirebaseAuth
 
-class EventsTableViewController: UIViewController, UITableViewDataSource {
+class EventsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var eventsArray: [Event] = []
     @IBOutlet weak var eventsTable: UITableView!
+    var uid: String!
+    var displayName: String!
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return eventsArray.count
@@ -23,12 +29,27 @@ class EventsTableViewController: UIViewController, UITableViewDataSource {
         return cell
     }
     
-
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.main.async() {
+            self.loadInitialData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         eventsTable.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
         eventsTable.dataSource = self
-        // Do any additional setup after loading the view.
+        eventsTable.delegate = self
+        let user = Auth.auth().currentUser
+        if let user = user {
+            // The user's ID, unique to the Firebase project.
+            // Do NOT use this value to authenticate with your backend server,
+            // if you have one. Use getTokenWithCompletion:completion: instead.
+            uid = user.uid
+            displayName = user.displayName
+        }
+       
+       
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,7 +57,30 @@ class EventsTableViewController: UIViewController, UITableViewDataSource {
         // Dispose of any resources that can be recreated.
     }
     
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "detailSegue", sender: self)
+    }
+    
+    func loadInitialData() {
+        // 1
+        guard let fileName = Bundle.main.path(forResource: "PublicArt", ofType: "json")
+            else { return }
+        let optionalData = try? Data(contentsOf: URL(fileURLWithPath: fileName))
+        
+        guard
+            let data = optionalData,
+            // 2
+            let json = try? JSONSerialization.jsonObject(with: data),
+            // 3
+            let dictionary = json as? [String: Any],
+            // 4
+            let events = dictionary["data"] as? [[Any]]
+            else { return }
+        // 5
+//        let validEvents = events.compactMap { Event(json: $0) }
+//        eventsArray.append(contentsOf: validEvents)
+    }
+    
     /*
     // MARK: - Navigation
 
