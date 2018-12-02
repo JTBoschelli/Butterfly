@@ -27,7 +27,6 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     var artists:[String] = []
     var searchQuery:String? = nil
     var lastSearch:String? = nil
-    var searchResults:APIResults? = nil
     @IBOutlet weak var searchResultsView: UITableView!
     
     override func viewDidLoad() {
@@ -65,11 +64,9 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
         backgroundQueue.async {
             let url = URL(string: "http://ws.audioscrobbler.com/2.0/?method=track.search&track=\(self.searchQuery!)&api_key=2af21301da406b8372c5677f623750f0&format=json")
             if let data = try? Data(contentsOf: url!){
-                //self.searchResults = try? JSONDecoder().decode(APIResults.self, from: data)
                 if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     if let results = json!["results"] as? [String: Any]{
                         if let trackmatches = results["trackmatches"] as? [String: Any]{
-                            //figure out what datatype track is (not [String: Any], [[String: Any]], [[[String: Any]]])
                             if let track = trackmatches["track"] as? [Any]{
                                 for item in track {
                                     if let song = item as? [String: Any]{
@@ -89,9 +86,6 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
                 
             }
-//            if let tempSongs = self.searchResults?.track{
-//                self.songData = tempSongs
-//            }
             DispatchQueue.main.async {
                 self.searchResultsView.reloadData()
             }
