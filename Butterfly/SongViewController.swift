@@ -15,8 +15,8 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "mycell", for: indexPath)
-        cell.textLabel!.text = songs[indexPath.item]
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        cell.textLabel!.text = songs[indexPath.item]+" - "+artists[indexPath.item]
         return cell
     }
     
@@ -69,13 +69,20 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
                 if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                     if let results = json!["results"] as? [String: Any]{
                         if let trackmatches = results["trackmatches"] as? [String: Any]{
-                            //figure out what datatype track is
-                            if let track = trackmatches["track"]{
-                                print(track)
-//                                for items in track {
-//                                    self.songs.append(items["name"]!)
-//                                    self.artists.append(items["artist"]!)
-//                                }
+                            //figure out what datatype track is (not [String: Any], [[String: Any]], [[[String: Any]]])
+                            if let track = trackmatches["track"] as? [Any]{
+                                for item in track {
+                                    if let song = item as? [String: Any]{
+                                        if let title = song["name"] as? String {
+                                            print(title)
+                                            self.songs.append(title)
+                                        }
+                                        if let artist = song["artist"] as? String {
+                                            print(artist)
+                                            self.artists.append(artist)
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
