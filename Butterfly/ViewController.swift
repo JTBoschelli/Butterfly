@@ -15,7 +15,24 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 
 
-class ViewController: UIViewController, LoginButtonDelegate {
+class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate, UITableViewDataSource {
+    
+    var eventsCreated:[String] = ["Please Login to View Your Events"]
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return eventsCreated.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let myCell = tableView.dequeueReusableCell(withIdentifier: "myCell")! as UITableViewCell
+        myCell.textLabel!.text = eventsCreated[indexPath.row]
+        
+        return myCell
+    }
+    
+    
+    @IBOutlet var eventsCreatedTableView: UITableView!
+    
     func loginButtonDidCompleteLogin(_ loginButton: LoginButton, result: LoginResult) {
         print("---LOGIN COMPLETE---")
         let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
@@ -36,9 +53,12 @@ class ViewController: UIViewController, LoginButtonDelegate {
                 let uid = user.uid
                 let name = user.displayName
                 ref.child("users").child(uid).setValue(["name": name!])
+                self.loadTableData(isIn: true, userName: name!)
+
             }
         }
         
+        eventsCreatedTableView.reloadData()
        
     }
     
@@ -50,12 +70,21 @@ class ViewController: UIViewController, LoginButtonDelegate {
         } catch let signOutError as NSError {
             print ("Error signing out: %@", signOutError)
         }
+        loadTableData(isIn: false, userName: "")
+        eventsCreatedTableView.reloadData()
     }
     
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        eventsCreatedTableView.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
+        eventsCreatedTableView.delegate = self
+        eventsCreatedTableView.dataSource = self
+        
+        if let user = Auth.auth().currentUser{
+            loadTableData(isIn:true, userName: user.displayName!)
+        }
         // Do any additional setup after loading the view, typically from a nib.
         let loginButton = LoginButton(readPermissions: [ .publicProfile ])
         loginButton.delegate = self
@@ -68,6 +97,42 @@ class ViewController: UIViewController, LoginButtonDelegate {
 //        if let accessToken = AccessToken.current{
 //            print("Hello")
 //        }
+    }
+    
+    func loadTableData(isIn:Bool, userName:String){
+        eventsCreated = []
+        if(isIn){
+            let userId = Auth.auth().currentUser!.uid
+            var ref: DatabaseReference!
+            
+            ref = Database.database().reference()
+            
+            print ("firebase time")
+            ref.child("events").observeSingleEvent(of: .value, with: {
+                snapshot in
+                print("\(snapshot.key) -> \(String(describing: snapshot.value))")
+                let someData = snapshot.value! as! Dictionary<String, NSDictionary>
+                
+                for (key,value) in someData {
+                    print("value is \(value["Creator"]!)")
+                    
+                    if let eventCreator = value["CreatorId"]{
+                        let creatorId = eventCreator as! String
+                        if(userId == creatorId){
+                            self.eventsCreated.append(value["Title"] as! String)
+                        }
+                    }
+                    print("value is \(value["Title"]!)")
+                    print("key is \(key)")
+                    //self.myArray.append(value)
+                    
+                }
+            })
+            print("done fire")
+        }
+        else{
+            eventsCreated = ["Please Login to View Your Events"]
+        }
     }
 
     override func didReceiveMemoryWarning() {
