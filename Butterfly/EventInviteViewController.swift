@@ -72,9 +72,7 @@ class EventInviteViewController: UIViewController, UITableViewDelegate, UITableV
     @objc func submitEvent(sender: UIButton!){
         var ref: DatabaseReference!
         ref = Database.database().reference()
-        
-        let eventCreator = event["Creator"]
-        
+                
         let eventCreatorId = Auth.auth().currentUser!.uid
         
         var inviteList:[String:String] = [:]

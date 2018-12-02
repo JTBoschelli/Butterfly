@@ -98,7 +98,7 @@ class CreateEventViewController: UIViewController {
                 
                 //Code to update child values taken from firebase docs on https://firebase.google.com/docs/database/ios/read-and-write
                 let key = ref.child("events").childByAutoId().key
-                let eventDetails:[String : AnyObject] = ["Title": eventName, "Date": eventDate, "Creator": creator, "Latitude": eventLatitude, "Longitude": eventLongitude, "Open": "true" as NSString]
+                let eventDetails:[String : AnyObject] = ["Title": eventName, "Date": eventDate, "Creator": creator, "CreatorId": uid as AnyObject, "Latitude": eventLatitude, "Longitude": eventLongitude, "Open": "true" as NSString]
                 
                 let childUpdates:[String: AnyObject] = ["/events/\(key!)": eventDetails as AnyObject,
                                     "/users/\(uid)/events-created/\(key!)/": "true" as NSString]
@@ -148,7 +148,7 @@ class CreateEventViewController: UIViewController {
                 var ref: DatabaseReference!
                 ref = Database.database().reference()
                 print(creator)
-                let eventDetails:[String : AnyObject] = ["Title": eventName, "Date": eventDate, "Creator": creator, "Latitude": eventLatitude, "Longitude": eventLongitude, "Open": "false" as NSString]
+                let eventDetails:[String : AnyObject] = ["Title": eventName, "Date": eventDate, "Creator": creator, "CreatorId": uid as AnyObject, "Latitude": eventLatitude, "Longitude": eventLongitude, "Open": "false" as NSString]
                 let detailedVC = EventInviteViewController()
                 detailedVC.event = eventDetails
                 navigationController?.pushViewController(detailedVC, animated: true)
