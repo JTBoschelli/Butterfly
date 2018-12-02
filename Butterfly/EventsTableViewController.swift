@@ -87,7 +87,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
             snapshot in
             print("\(snapshot.key) -> \(String(describing: snapshot.value))")
             let someData = snapshot.value! as! Dictionary<String, NSDictionary>
-            
+            self.eventsArray = []
             for (_,value) in someData {
                 let lat:Double = value["Latitude"]! as! Double
                 let long:Double = value["Longitude"]! as! Double
