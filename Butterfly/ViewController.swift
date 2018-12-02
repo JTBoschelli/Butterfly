@@ -19,17 +19,36 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
     
     var eventsCreated:[String] = ["Please Login to View Your Events"]
     
+    var invites:[String] = ["Please Login to View Your Invites"]
+    var inviteIds:[String] = []
+    
+    @IBOutlet var accountHeader: UILabel!
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return eventsCreated.count
+        if tableView == eventsCreatedTableView{
+            return eventsCreated.count
+        }
+        else{
+            return invites.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let myCell = tableView.dequeueReusableCell(withIdentifier: "myCell")! as UITableViewCell
-        myCell.textLabel!.text = eventsCreated[indexPath.row]
-        
-        return myCell
+        if tableView == eventsCreatedTableView{
+            let myCell = tableView.dequeueReusableCell(withIdentifier: "myCell")! as UITableViewCell
+            myCell.textLabel!.text = eventsCreated[indexPath.row]
+            
+            return myCell
+        }
+        else{
+            let myCell = UITableViewCell(style: .subtitle, reuseIdentifier: "inviteCell")
+            myCell.textLabel!.text = invites[indexPath.row]
+            myCell.detailTextLabel?.text = inviteIds[indexPath.row]
+            return myCell
+        }
     }
     
+    @IBOutlet var inviteTableView: UITableView!
     
     @IBOutlet var eventsCreatedTableView: UITableView!
     
@@ -54,7 +73,8 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
                 let name = user.displayName
                 ref.child("users").child(uid).setValue(["name": name!])
                 self.loadTableData(isIn: true, userName: name!)
-
+                self.loadInviteData(isIn: true, userName: name!)
+                self.accountHeader.text = "Hello, \(name!)"
             }
         }
         
@@ -71,6 +91,8 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
             print ("Error signing out: %@", signOutError)
         }
         loadTableData(isIn: false, userName: "")
+        accountHeader.text = "Account"
+        loadInviteData(isIn: false, userName: "")
         eventsCreatedTableView.reloadData()
     }
     
@@ -82,14 +104,19 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
         eventsCreatedTableView.delegate = self
         eventsCreatedTableView.dataSource = self
         
+        inviteTableView.register(UITableViewCell.self, forCellReuseIdentifier: "inviteCell")
+        inviteTableView.delegate = self
+        inviteTableView.dataSource = self
+        
         if let user = Auth.auth().currentUser{
             loadTableData(isIn:true, userName: user.displayName!)
+            accountHeader.text = "Welcome, \(user.displayName!)"
         }
         // Do any additional setup after loading the view, typically from a nib.
         let loginButton = LoginButton(readPermissions: [ .publicProfile ])
         loginButton.delegate = self
 //        loginButton.center = view.center
-        loginButton.frame.origin.y = 20
+        loginButton.frame.origin.y = 625
         loginButton.frame.origin.x = self.view.frame.width/2 - loginButton.frame.width
      //   loginButton.frame.origin.x = view.centerXAnchor.
         view.addSubview(loginButton)
@@ -97,6 +124,51 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
 //        if let accessToken = AccessToken.current{
 //            print("Hello")
 //        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let user = Auth.auth().currentUser{
+            loadTableData(isIn: true, userName: user.displayName!)
+            loadInviteData(isIn: true, userName: user.displayName!)
+            accountHeader.text = "Welcome, \(user.displayName!)"
+        }
+        else{
+            loadTableData(isIn: false, userName: "")
+            loadInviteData(isIn: false, userName: "")
+            accountHeader.text = "Account"
+        }
+    }
+    
+    func loadInviteData(isIn:Bool, userName:String){
+        invites = []
+        inviteIds = []
+        if(isIn){
+            let userId = Auth.auth().currentUser!.uid
+            var ref: DatabaseReference!
+            
+            ref = Database.database().reference()
+            
+            print ("firebase time")
+            ref.child("users").child(userId).child("invites").observeSingleEvent(of: .value, with: {
+                snapshot in
+                print("\(snapshot.key) -> \(String(describing: snapshot.value))")
+                let someData = snapshot.value! as! Dictionary<String, NSDictionary>
+                
+                for (key, value) in someData {
+                    print("key is \(key)")
+                    print("value is \(value)")
+                    print("Test: \(value.allKeys[0])")
+                    self.inviteIds.append(key)
+                    self.invites.append(value.allKeys[0] as! String)
+                    
+                    self.inviteTableView.reloadData()
+                }
+            })
+            print("done fire")        }
+        else{
+            invites = ["Please Login to View Your Invites"]
+        }
+        inviteTableView.reloadData()
     }
     
     func loadTableData(isIn:Bool, userName:String){
@@ -119,13 +191,14 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
                     if let eventCreator = value["CreatorId"]{
                         let creatorId = eventCreator as! String
                         if(userId == creatorId){
+                            print("Hit")
                             self.eventsCreated.append(value["Title"] as! String)
                         }
                     }
                     print("value is \(value["Title"]!)")
                     print("key is \(key)")
                     //self.myArray.append(value)
-                    
+                    self.eventsCreatedTableView.reloadData()
                 }
             })
             print("done fire")
