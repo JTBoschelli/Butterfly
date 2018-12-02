@@ -11,19 +11,20 @@ import UIKit
 class SongViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return songData.count
+        return songs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mycell", for: indexPath)
-        cell.textLabel!.text = songData[indexPath.item].name
+        cell.textLabel!.text = songs[indexPath.item]
         return cell
     }
     
 
     
     @IBOutlet weak var searchBar: UISearchBar!
-    var songData:[Song] = []
+    var songs:[String] = []
+    var artists:[String] = []
     var searchQuery:String? = nil
     var lastSearch:String? = nil
     var searchResults:APIResults? = nil
@@ -64,17 +65,30 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
         backgroundQueue.async {
             let url = URL(string: "http://ws.audioscrobbler.com/2.0/?method=track.search&track=\(self.searchQuery!)&api_key=2af21301da406b8372c5677f623750f0&format=json")
             if let data = try? Data(contentsOf: url!){
-                self.searchResults = try? JSONDecoder().decode(APIResults.self, from: data)
+                //self.searchResults = try? JSONDecoder().decode(APIResults.self, from: data)
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    if let results = json!["results"] as? [String: Any]{
+                        if let trackmatches = results["trackmatches"] as? [String: Any]{
+                            //figure out what datatype track is
+                            if let track = trackmatches["track"] as? [[String: Any]]{
+                                print(track)
+//                                for items in track {
+//                                    self.songs.append(items["name"]!)
+//                                    self.artists.append(items["artist"]!)
+//                                }
+                            }
+                        }
+                    }
+                }
+                
             }
-            if let tempSongs = self.searchResults?.track{
-                self.songData = tempSongs
-            }
+//            if let tempSongs = self.searchResults?.track{
+//                self.songData = tempSongs
+//            }
             DispatchQueue.main.async {
                 self.searchResultsView.reloadData()
             }
         }
-        print(searchResults)
-        print(songData)
     }
 
     /*
