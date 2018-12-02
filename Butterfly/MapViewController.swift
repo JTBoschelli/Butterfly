@@ -77,6 +77,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        mapView.delegate = self
+        let user = Auth.auth().currentUser
+        if let user = user {
+            // The user's ID, unique to the Firebase project.
+            // Do NOT use this value to authenticate with your backend server,
+            // if you have one. Use getTokenWithCompletion:completion: instead.
+            uid = user.uid
+            displayName = user.displayName
+        }
+        
+        loadInitialData()
+    }
+    
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -100,7 +116,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destination = segue.destination as? EventDetailViewController
-      //  destination.
+        destination?.name = (sender as! MKAnnotationView).annotation!.title as! String
+        //destination?.date = (sender as! MKAnnotationView).annotation!.
+        
+        let temp = (sender as! MKAnnotationView).annotation!
+        for event in eventsArray{
+            if(temp.title == event.title && temp.coordinate.latitude == event.coordinate.latitude && temp.coordinate.longitude == temp.coordinate.longitude ){
+                destination?.date = event.date!
+                destination?.lat = event.coordinate.latitude
+                destination?.long = event.coordinate.longitude
+            }
+        }
         
     }
     

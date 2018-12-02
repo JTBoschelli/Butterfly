@@ -58,8 +58,26 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "detailSegue", sender: self)
+        performSegue(withIdentifier: "detailSegue", sender: indexPath)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         guard let index = sender as? IndexPath else { return }
+        
+        
+        let destination = segue.destination as? EventDetailViewController
+        destination?.name = eventsArray[index.row].title!
+        destination?.date = eventsArray[index.row].date!
+        destination?.long = eventsArray[index.row].coordinate.longitude
+        destination?.lat = eventsArray[index.row].coordinate.latitude
+        
+        
+    }
+    
+    
+    
+    
+    
     
     func loadInitialData() {
         var ref: DatabaseReference!

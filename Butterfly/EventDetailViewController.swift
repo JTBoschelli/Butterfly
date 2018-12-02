@@ -14,30 +14,42 @@ class EventDetailViewController: UIViewController {
 
     @IBOutlet weak var TheMap: MKMapView!
     
-    @IBOutlet weak var theTitle: UILabel!
-    
     @IBOutlet weak var theDate: UILabel!
     
     
-    @IBOutlet weak var theTime: UILabel!
     
     
-    let invite_list:[String:String]? = nil
-//    var title:String
+    //let invite_list:[String:String]? = nil
+    var name:String
+    var date:String
+    var lat:Double
+    var long:Double
+   // let coordinate = CLLocationCoordinate2DMake(lat, long)
     
-    func focusMapView() {
-        let mapCenter = CLLocationCoordinate2DMake(38.6488, -90.3108)
+    required init?(coder aDecoder: NSCoder) {
+        name = ""
+        date = ""
+        lat = 0.0
+        long = 0.0
+        
+        super.init(coder: aDecoder)
+    }
+    
+    func focusMapView(lat2:Double, long2:Double) {
+        let mapCenter = CLLocationCoordinate2DMake(lat2, long2)
         let span = MKCoordinateSpanMake(0.03, 0.03)
         let region = MKCoordinateRegionMake(mapCenter, span)
         TheMap.region = region
     }
     
-    func displayLocation() {
+    func displayLocation(title1:String, lat1:Double, long1:Double) {
         let pin = MKPointAnnotation()
-        pin.title = "EVENT"
-        let latitude: CLLocationDegrees = 38.6488
-        let longitude: CLLocationDegrees = -90.3108
+        pin.title = title1
+//        let latitude: CLLocationDegrees = 38.6488
+//        let longitude: CLLocationDegrees = -90.3108
         
+        let latitude: CLLocationDegrees = lat1
+        let longitude: CLLocationDegrees = long1
         let location = CLLocationCoordinate2DMake(latitude, longitude)
 
        // let theLocation = CLLocation(latitude: 38.6488, longitude: 90.3108)
@@ -51,8 +63,12 @@ class EventDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        displayLocation()
-        focusMapView()
+        displayLocation(title1:name, lat1:lat, long1:long)
+        focusMapView(lat2:lat, long2:long)
+        
+        self.title = name
+        theDate.text = date
+        
         // Do any additional setup after loading the view.
     }
 
