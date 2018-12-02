@@ -70,7 +70,7 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
                     if let results = json!["results"] as? [String: Any]{
                         if let trackmatches = results["trackmatches"] as? [String: Any]{
                             //figure out what datatype track is
-                            if let track = trackmatches["track"] as? [[String: Any]]{
+                            if let track = trackmatches["track"]{
                                 print(track)
 //                                for items in track {
 //                                    self.songs.append(items["name"]!)
