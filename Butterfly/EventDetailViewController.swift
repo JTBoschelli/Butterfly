@@ -14,6 +14,17 @@ class EventDetailViewController: UIViewController {
 
     @IBOutlet weak var TheMap: MKMapView!
     
+    @IBOutlet weak var theTitle: UILabel!
+    
+    @IBOutlet weak var theDate: UILabel!
+    
+    
+    @IBOutlet weak var theTime: UILabel!
+    
+    
+    let invite_list:[String:String]? = nil
+//    var title:String
+    
     func focusMapView() {
         let mapCenter = CLLocationCoordinate2DMake(38.6488, -90.3108)
         let span = MKCoordinateSpanMake(0.03, 0.03)
