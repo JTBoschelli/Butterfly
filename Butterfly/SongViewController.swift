@@ -17,6 +17,11 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel!.text = songs[indexPath.item]+" - "+artists[indexPath.item]
+        let buttonView = CGRect(x: cell.frame.maxX, y: cell.frame.minY, width: cell.frame.height, height: cell.frame.height)
+        let button = UIButton(frame: buttonView)
+        button.setTitle("add", for: UIControlState.normal)
+        button.addTarget(self, action: #selector(addToPlaylist), for: .touchUpInside)
+        cell.addSubview(button)
         return cell
     }
     
@@ -27,7 +32,12 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     var artists:[String] = []
     var searchQuery:String? = nil
     var lastSearch:String? = nil
+    var eventId:String! = ""
     @IBOutlet weak var searchResultsView: UITableView!
+    
+    @objc func addToPlaylist(){
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +78,8 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
                     if let results = json!["results"] as? [String: Any]{
                         if let trackmatches = results["trackmatches"] as? [String: Any]{
                             if let track = trackmatches["track"] as? [Any]{
+                                self.songs = []
+                                self.artists = []
                                 for item in track {
                                     if let song = item as? [String: Any]{
                                         if let title = song["name"] as? String {
@@ -84,12 +96,12 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
                         }
                     }
                 }
-                
             }
             DispatchQueue.main.async {
                 self.searchResultsView.reloadData()
             }
         }
+
     }
 
     /*
