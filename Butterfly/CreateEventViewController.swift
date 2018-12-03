@@ -97,7 +97,21 @@ class CreateEventViewController: UIViewController, CLLocationManagerDelegate {
 
         let lat = eventLat.text
         if let latitude = Double(lat!){
-            eventLatitude = latitude as NSNumber
+            if(abs(latitude) <= 90){
+                eventLatitude = latitude as NSNumber
+            }
+            else{
+                //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+                
+                let alertController = UIAlertController(title: "ERROR", message: "Must enter a proper coordinate value", preferredStyle: .alert)
+                
+                let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(defaultAction)
+                
+                present(alertController, animated: true, completion: nil)
+                //End of Citation
+                return
+            }
         }
         else{
             //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
@@ -113,7 +127,21 @@ class CreateEventViewController: UIViewController, CLLocationManagerDelegate {
         }
         let long = eventLong.text
         if let longitude = Double(long!){
-            eventLongitude = longitude as NSNumber
+            if(abs(longitude) <= 180){
+                eventLongitude = longitude as NSNumber
+            }
+            else{
+                //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+                
+                let alertController = UIAlertController(title: "ERROR", message: "Must enter a proper coordinate value", preferredStyle: .alert)
+                
+                let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(defaultAction)
+                
+                present(alertController, animated: true, completion: nil)
+                //End of Citation
+                return
+            }
         }
         else{
             //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
