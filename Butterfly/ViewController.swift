@@ -43,9 +43,52 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
         else{
             let myCell = UITableViewCell(style: .subtitle, reuseIdentifier: "inviteCell")
             myCell.textLabel!.text = invites[indexPath.row]
-            myCell.detailTextLabel?.text = inviteIds[indexPath.row]
+            if let _ = Auth.auth().currentUser{
+                let buttonView = CGRect(x: myCell.frame.maxX-50, y: myCell.frame.minY, width: myCell.frame.width/6, height: myCell.frame.height)
+                let button = UIButton(frame: buttonView)
+                button.setTitleColor(UIColor.blue, for: .normal)
+                button.setTitle("RSVP", for: UIControlState.normal)
+                button.addTarget(self, action: #selector(rsvpToEvent), for: .touchUpInside)
+                myCell.addSubview(button)
+            }
             return myCell
         }
+    }
+    
+    @objc func rsvpToEvent(_ sender: UIButton){
+        print("Here")
+        //Finding button that was pressed derived from example on https://forums.developer.apple.com/thread/67265
+        var superview = sender.superview
+        while let view = superview, !(view is UITableViewCell){
+            superview = view.superview
+        }
+        guard let cell = superview as? UITableViewCell else {
+            print("Button not contained in a table view cell")
+            return
+        }
+        guard let indexPath = inviteTableView.indexPath(for: cell) else {
+            print("Failed to get index path for cell containing the button")
+            return
+        }
+        //End of Citation
+        let eventTitle = invites[indexPath.row]
+        let eventId = inviteIds[indexPath.row]
+        invites.remove(at: indexPath.row)
+        inviteIds.remove(at: indexPath.row)
+        var ref: DatabaseReference!
+        ref = Database.database().reference()
+        if let user = Auth.auth().currentUser{
+            let uid = user.uid
+            let rsvpChild:[String : AnyObject] = ["/events/\(eventId)/rsvp-list/\(uid)": "true" as NSString]
+            ref.updateChildValues(rsvpChild){
+                (error:Error?, ref:DatabaseReference) in
+                if let error = error {
+                    print("Data could not be saved: \(error).")
+                }
+                ref.child("users").child(uid).child("invites").child(eventId).removeValue()
+            }
+        }
+        inviteTableView.reloadData()
     }
     
     @IBOutlet var inviteTableView: UITableView!
@@ -71,14 +114,21 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
                 // if you have one. Use getTokenWithCompletion:completion: instead.
                 let uid = user.uid
                 let name = user.displayName
-                ref.child("users").child(uid).setValue(["name": name!])
-                self.loadTableData(isIn: true, userName: name!)
-                self.loadInviteData(isIn: true, userName: name!)
-                self.accountHeader.text = "Hello, \(name!)"
+                let userInviteChild:[String : NSString] = ["/users/\(uid)/name": name as! NSString]
+                ref.updateChildValues(userInviteChild){
+                    (error:Error?, ref:DatabaseReference) in
+                    if let error = error {
+                        print("Data could not be saved: \(error).")
+                    }
+                    self.loadTableData(isIn: true, userName: name!)
+                    self.loadInviteData(isIn: true, userName: name!)
+                    self.accountHeader.text = "Hello, \(name!)"
+                }
+                
             }
         }
         
-        eventsCreatedTableView.reloadData()
+        //eventsCreatedTableView.reloadData()
        
     }
     
@@ -152,21 +202,24 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
             ref.child("users").child(userId).child("invites").observeSingleEvent(of: .value, with: {
                 snapshot in
                 print("\(snapshot.key) -> \(String(describing: snapshot.value))")
-                let someData = snapshot.value! as! Dictionary<String, NSDictionary>
-                
-                for (key, value) in someData {
-                    print("key is \(key)")
-                    print("value is \(value)")
-                    print("Test: \(value.allKeys[0])")
-                    self.inviteIds.append(key)
-                    self.invites.append(value.allKeys[0] as! String)
+                if snapshot.hasChildren(){
+                    let someData = snapshot.value! as! Dictionary<String, NSDictionary>
                     
-                    self.inviteTableView.reloadData()
+                    for (key, value) in someData {
+                        print("key is \(key)")
+                        print("value is \(value)")
+                        print("Test: \(value.allKeys[0])")
+                        self.inviteIds.append(key)
+                        self.invites.append(value.allKeys[0] as! String)
+                        
+                        self.inviteTableView.reloadData()
+                    }
                 }
             })
             print("done fire")        }
         else{
             invites = ["Please Login to View Your Invites"]
+            inviteIds = ["Please Login"]
         }
         inviteTableView.reloadData()
     }
