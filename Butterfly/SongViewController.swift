@@ -87,8 +87,10 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.present(alertController, animated: true, completion: nil)
                 self.navigationController?.popViewController(animated: true)
                 //End of Citation
+                self.getPlaylist()
             }
         }
+        
     }
     
     override func viewDidLoad() {
@@ -102,8 +104,21 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func getPlaylist() {
+        databaseSongs = []
+        var ref: DatabaseReference!
+        ref = Database.database().reference()
+        ref.child("events").child(eventId).child("song-list").observeSingleEvent(of: .value, with: {
+            snapshot in
+            if let someData = snapshot.value as? Dictionary<String, String>{
+                for (key, _) in someData{
+                    self.databaseSongs.append(key)
+                }
+                self.playlistView.reloadData()
+            }
+        })
         
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
