@@ -39,13 +39,28 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     var lastSearch:String? = nil
     var eventId:String! = ""
     var selectedSong:String! = ""
+    var databaseSongs:[String] = []
     @IBOutlet weak var searchResultsView: UITableView!
     
-    @objc func addToPlaylist(){
+    @objc func addToPlaylist(_ sender: UIButton){
+        //finding selected button from https://forums.developer.apple.com/thread/67265
+        var superview = sender.superview
+        while let view = superview, !(view is UITableViewCell) {
+            superview = view.superview
+        }
+        guard let cell = superview as? UITableViewCell else {
+            print("button is not contained in a table view cell")
+            return
+        }
+        guard let indexPath = searchResultsView.indexPath(for: cell) else {
+            print("failed to get index path for cell containing button")
+            return
+        }
+        let selectedSong = songs[indexPath.row] + " - " + artists[indexPath.row]
         var ref: DatabaseReference!
         ref = Database.database().reference()
         //Code to update child values taken from firebase docs on https://firebase.google.com/docs/database/ios/read-and-write
-        let childUpdates:[String: AnyObject] = ["/events/\(eventId)/song-list/\(selectedSong)": "true" as NSString]
+        let childUpdates:[String: AnyObject] = ["/events/\(eventId!)/song-list/\(selectedSong)": "true" as NSString]
         ref.updateChildValues(childUpdates){
             //End of Citation
             (error:Error?, ref:DatabaseReference) in
