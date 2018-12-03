@@ -71,11 +71,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             uid = user.uid
             displayName = user.displayName
         }
+        else{
+            uid = ""
+            displayName = ""
+        }
 
         loadInitialData()
 
 
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         mapView.delegate = self
@@ -86,6 +91,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             // if you have one. Use getTokenWithCompletion:completion: instead.
             uid = user.uid
             displayName = user.displayName
+        }
+        else{
+            uid = ""
+            displayName = ""
         }
         
         loadInitialData()
@@ -148,7 +157,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 let inviteList = value["invite-list"] as? [String:String] ?? ["No List":"true"]
                 let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, eventId: key, date: value["Date"]! as! String, coordinate: coordinate, inviteList: inviteList, open: value["Open"]! as! String)
                 let open:String = value["Open"]! as! String
-                if(open == "true"){
+                let creator:String = value["CreatorId"]! as! String
+                
+                if(open == "true" || creator == self.uid){
                     self.mapView.addAnnotation(newEvent)
                     self.eventsArray.append(newEvent)
                 }

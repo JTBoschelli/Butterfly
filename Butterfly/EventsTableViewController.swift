@@ -30,6 +30,18 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        let user = Auth.auth().currentUser
+        if let user = user {
+            // The user's ID, unique to the Firebase project.
+            // Do NOT use this value to authenticate with your backend server,
+            // if you have one. Use getTokenWithCompletion:completion: instead.
+            uid = user.uid
+            displayName = user.displayName
+        }
+        else{
+            uid = ""
+            displayName = ""
+        }
         DispatchQueue.main.async() {
             self.loadInitialData()
         }
@@ -49,9 +61,14 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
             uid = user.uid
             displayName = user.displayName
         }
+        else{
+            uid = ""
+            displayName = ""
+        }
         
         
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -96,7 +113,8 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
                 let inviteList = value["invite-list"] as? [String:String] ?? ["No List":"true"]
                 let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, eventId: key, date: value["Date"]! as! String, coordinate: coordinate, inviteList: inviteList, open: value["Open"]! as! String)
                 let open:String = value["Open"]! as! String
-                if(open == "true"){
+                let creator = value["CreatorId"]! as! String
+                if(open == "true" || creator == self.uid){
                     self.eventsArray.append(newEvent)
                 }
                 else{

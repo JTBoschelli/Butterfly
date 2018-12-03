@@ -34,7 +34,7 @@ class EventInviteViewController: UIViewController, UITableViewDelegate, UITableV
         
         //Code for programatically adding button derived from example on https://stackoverflow.com/questions/24030348/how-to-create-a-button-programmatically
         let button = UIButton()
-        button.frame = CGRect(x: 0, y: view.frame.height - 70, width: view.frame.width, height: 30)
+        button.frame = CGRect(x: 0, y: view.frame.height - 100, width: view.frame.width, height: 30)
         button.backgroundColor = UIColor.blue
         button.setTitle("Submit Event with Guest List", for: .normal)
         button.addTarget(self, action: #selector(submitEvent), for: .touchUpInside)
