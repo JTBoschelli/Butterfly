@@ -239,7 +239,7 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
                 let someData = snapshot.value! as! Dictionary<String, NSDictionary>
                 
                 for (key,value) in someData {
-                    print("value is \(value["Creator"]!)")
+                  //  print("value is \(value["Creator"]!)")
                     
                     if let eventCreator = value["CreatorId"]{
                         let creatorId = eventCreator as! String

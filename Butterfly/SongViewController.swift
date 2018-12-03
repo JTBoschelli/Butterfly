@@ -45,7 +45,7 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
         var ref: DatabaseReference!
         ref = Database.database().reference()
         //Code to update child values taken from firebase docs on https://firebase.google.com/docs/database/ios/read-and-write
-        let childUpdates:[String: AnyObject] = ["/events/\(eventId)/song-list/\(selectedSong)": "true" as NSString]
+        let childUpdates:[String: AnyObject] = ["/events/\(eventId!)/song-list/\(selectedSong)": "true" as NSString]
         ref.updateChildValues(childUpdates){
             //End of Citation
             (error:Error?, ref:DatabaseReference) in
