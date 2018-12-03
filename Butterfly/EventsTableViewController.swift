@@ -24,7 +24,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell")! as UITableViewCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: "myCell")! as UITableViewCell
         cell.textLabel!.text = eventsArray[indexPath.row].title
         return cell
     }
@@ -72,6 +72,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
         destination?.lat = eventsArray[index.row].coordinate.latitude
         destination?.invites = eventsArray[index.row].inviteList!
         destination?.eventId = eventsArray[index.row].eventId!
+        destination?.open = eventsArray[index.row].eventId!
     }
     
     
@@ -85,7 +86,6 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
         ref = Database.database().reference()
         ref.child("events").observeSingleEvent(of: .value, with: {
             snapshot in
-            print("\(snapshot.key) -> \(String(describing: snapshot.value))")
             let someData = snapshot.value! as! Dictionary<String, NSDictionary>
             self.eventsArray = []
             for (key,value) in someData {
@@ -94,7 +94,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
                 let coordinate = CLLocationCoordinate2DMake(lat, long)
                 let inviteList = value["invite-list"] as? [String:String] ?? ["No List":"true"]
                 let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, eventId: key, date: value["Date"]! as! String, coordinate: coordinate, inviteList: inviteList, open: value["Open"]! as! String)
-                let open:String = value["Open"]! as! String
+                var open:String = value["Open"]! as! String
                 if(open == "true"){
                     self.eventsArray.append(newEvent)
                 }
