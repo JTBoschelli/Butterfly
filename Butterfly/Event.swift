@@ -16,8 +16,9 @@ class Event: NSObject, MKAnnotation {
     let coordinate: CLLocationCoordinate2D
     let inviteList: [String:String]?
     let eventId: String?
+    let open: String?
     
-    init(title: String,locationName:String, eventId:String,  date:String, coordinate: CLLocationCoordinate2D,inviteList:[String:String]?) {
+    init(title: String,locationName:String, eventId:String,  date:String, coordinate: CLLocationCoordinate2D,inviteList:[String:String]?, open:String) {
         self.title = title
         self.coordinate = coordinate
         self.date = date
