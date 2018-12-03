@@ -71,6 +71,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
         destination?.long = eventsArray[index.row].coordinate.longitude
         destination?.lat = eventsArray[index.row].coordinate.latitude
         destination?.invites = eventsArray[index.row].inviteList!
+        destination?.open = eventsArray[index.row].open!
 
         
     }
@@ -94,7 +95,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
                 let long:Double = value["Longitude"]! as! Double
                 let coordinate = CLLocationCoordinate2DMake(lat, long)
                 let inviteList = value["invite-list"] as? [String:String] ?? ["No List":"true"]
-                let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, date: value["Date"]! as! String, coordinate: coordinate, inviteList: inviteList)
+                let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, date: value["Date"]! as! String, coordinate: coordinate, inviteList: inviteList, open: value["Open"]! as! String)
                 let open:String = value["Open"]! as! String
                 if(open == "true"){
                     self.eventsArray.append(newEvent)
