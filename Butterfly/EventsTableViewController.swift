@@ -37,6 +37,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Events (List)"
         eventsTable.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
         eventsTable.dataSource = self
         eventsTable.delegate = self

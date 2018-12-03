@@ -60,6 +60,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Events (Map)"
         // Do any additional setup after loading the view, typically from a nib.
         mapView.delegate = self
         let user = Auth.auth().currentUser
