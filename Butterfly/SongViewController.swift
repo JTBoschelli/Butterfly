@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FirebaseDatabase
+import FirebaseAuth
 
 class SongViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
@@ -20,6 +22,7 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
         let buttonView = CGRect(x: cell.frame.maxX, y: cell.frame.minY, width: cell.frame.height, height: cell.frame.height)
         let button = UIButton(frame: buttonView)
         button.setTitle("add", for: UIControlState.normal)
+        button.setTitleColor(UIColor.black, for: .normal)
         button.addTarget(self, action: #selector(addToPlaylist), for: .touchUpInside)
         cell.addSubview(button)
         return cell
@@ -36,7 +39,30 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var searchResultsView: UITableView!
     
     @objc func addToPlaylist(){
-        
+        let user = Auth.auth().currentUser
+        if let eventCreator = user{
+            let uid = eventCreator.uid
+            let creator = eventCreator.displayName! as NSString
+            var ref: DatabaseReference!
+            ref = Database.database().reference()
+            print(creator)
+            let eventDetails:[String : AnyObject] = ["Title": eventName, "Date": eventDate, "Creator": creator, "CreatorId": uid as AnyObject, "Latitude": eventLatitude, "Longitude": eventLongitude, "Open": "false" as NSString]
+            let detailedVC = EventInviteViewController()
+            detailedVC.event = eventDetails
+            navigationController?.pushViewController(detailedVC, animated: true)
+        }
+        else{
+            //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+            
+            let alertController = UIAlertController(title: "ERROR", message: "Must be logged in to create event", preferredStyle: .alert)
+            
+            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(defaultAction)
+            
+            present(alertController, animated: true, completion: nil)
+            //End of Citation
+            return
+        }
     }
     
     override func viewDidLoad() {
