@@ -8,22 +8,28 @@
 
 import UIKit
 import MapKit
+import FirebaseDatabase
+import FirebaseAuth
 
 
-class EventDetailViewController: UIViewController {
+
+class EventDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var TheMap: MKMapView!
     
     @IBOutlet weak var theDate: UILabel!
     
     
-    
-    
+    var uid: String!
+    var displayName: String!
+    var invitedPeople:[String] = []
+    let group = DispatchGroup()
     //let invite_list:[String:String]? = nil
     var name:String
     var date:String
     var lat:Double
     var long:Double
+    var invites:[String:String]
    // let coordinate = CLLocationCoordinate2DMake(lat, long)
     
     required init?(coder aDecoder: NSCoder) {
@@ -31,7 +37,7 @@ class EventDetailViewController: UIViewController {
         date = ""
         lat = 0.0
         long = 0.0
-        
+        invites = ["":""]
         super.init(coder: aDecoder)
     }
     
@@ -45,19 +51,18 @@ class EventDetailViewController: UIViewController {
     func displayLocation(title1:String, lat1:Double, long1:Double) {
         let pin = MKPointAnnotation()
         pin.title = title1
-//        let latitude: CLLocationDegrees = 38.6488
-//        let longitude: CLLocationDegrees = -90.3108
         
         let latitude: CLLocationDegrees = lat1
         let longitude: CLLocationDegrees = long1
         let location = CLLocationCoordinate2DMake(latitude, longitude)
 
-       // let theLocation = CLLocation(latitude: 38.6488, longitude: 90.3108)
         pin.coordinate = location
         TheMap.addAnnotation(pin)
         print("loaded")
     }
     
+
+    @IBOutlet weak var theTableView: UITableView!
     
     
     
@@ -66,12 +71,53 @@ class EventDetailViewController: UIViewController {
         displayLocation(title1:name, lat1:lat, long1:long)
         focusMapView(lat2:lat, long2:long)
         
+        let userKeyArray = Array(invites.keys)
+        
+        let user = Auth.auth().currentUser
+        if let user = user {
+            // The user's ID, unique to the Firebase project.
+            // Do NOT use this value to authenticate with your backend server,
+            // if you have one. Use getTokenWithCompletion:completion: instead.
+            uid = user.uid
+            displayName = user.displayName
+        }
+        var ref: DatabaseReference!
+        
+        ref = Database.database().reference()
+        for key in userKeyArray{
+                group.enter()
+                ref.child("users").child(key).child("name").observeSingleEvent(of: .value, with: {
+                snapshot in
+                    if let unwrapped = snapshot.value{
+                        self.invitedPeople.append(unwrapped as! String)
+                        self.group.leave()
+                    }
+                    
+            })
+        }
+        group.notify(queue: .main){
+            self.theTableView.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
+            self.theTableView.dataSource = self
+            self.theTableView.delegate = self
+            self.theTableView.reloadData()
+        }
+
         self.title = name
         theDate.text = date
         
         // Do any additional setup after loading the view.
     }
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return invitedPeople.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell")! as UITableViewCell
+        cell.textLabel!.text = invitedPeople[indexPath.row]
+        return cell
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

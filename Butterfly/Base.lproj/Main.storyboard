@@ -97,6 +97,7 @@
                     <connections>
                         <outlet property="TheMap" destination="9Ff-rq-FqV" id="K47-eS-cc3"/>
                         <outlet property="theDate" destination="dNW-RZ-vbx" id="dtf-M2-oFb"/>
+                        <outlet property="theTableView" destination="Axq-ne-32N" id="Sbj-Br-s5c"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="plM-bH-6KV" userLabel="First Responder" sceneMemberID="firstResponder"/>

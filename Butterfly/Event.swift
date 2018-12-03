@@ -14,12 +14,14 @@ class Event: NSObject, MKAnnotation {
     let date: String?
     let locationName: String
     let coordinate: CLLocationCoordinate2D
+    let inviteList: [String:String]?
     
-    init(title: String,locationName:String,  date:String, coordinate: CLLocationCoordinate2D) {
+    init(title: String,locationName:String,  date:String, coordinate: CLLocationCoordinate2D,inviteList:[String:String]?) {
         self.title = title
         self.coordinate = coordinate
         self.date = date
         self.locationName = title
+        self.inviteList = inviteList
         super.init()
     }
     

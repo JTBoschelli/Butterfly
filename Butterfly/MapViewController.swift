@@ -36,7 +36,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
         
         if CLLocationManager.locationServicesEnabled() {
-            //locationManager.startUpdatingHeading()
             locationManager.startUpdatingLocation()
         }
     }
@@ -109,7 +108,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
                  calloutAccessoryControlTapped control: UIControl) {
-      //  let location = view.annotation as! Event
         performSegue(withIdentifier: "events", sender: view)
     }
     
@@ -125,6 +123,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 destination?.date = event.date!
                 destination?.lat = event.coordinate.latitude
                 destination?.long = event.coordinate.longitude
+                destination?.invites = event.inviteList!
             }
         }
         
@@ -137,14 +136,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         ref = Database.database().reference()
         ref.child("events").observeSingleEvent(of: .value, with: {
             snapshot in
-            print("\(snapshot.key) -> \(String(describing: snapshot.value))")
             let someData = snapshot.value! as! Dictionary<String, NSDictionary>
             
             for (key,value) in someData {
                 let lat:Double = value["Latitude"]! as! Double
                 let long:Double = value["Longitude"]! as! Double
                 let coordinate = CLLocationCoordinate2DMake(lat, long)
-                let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, date: value["Date"]! as! String, coordinate: coordinate)
+                let inviteList = value["invite-list"] as? [String:String] ?? ["No List":"true"]
+                let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, date: value["Date"]! as! String, coordinate: coordinate, inviteList: inviteList)
                 let open:String = value["Open"]! as! String
                 if(open == "true"){
                     self.mapView.addAnnotation(newEvent)
