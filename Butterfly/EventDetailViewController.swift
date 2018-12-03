@@ -40,6 +40,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         lat = 0.0
         long = 0.0
         invites = ["":""]
+        open = ""
         super.init(coder: aDecoder)
     }
     
@@ -86,17 +87,20 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         var ref: DatabaseReference!
         
         ref = Database.database().reference()
-        for key in userKeyArray{
+        if (self.open == "false"){
+            for key in userKeyArray{
                 group.enter()
                 ref.child("users").child(key).child("name").observeSingleEvent(of: .value, with: {
-                snapshot in
+                    snapshot in
                     if let unwrapped = snapshot.value{
                         self.invitedPeople.append(unwrapped as! String)
                         self.group.leave()
                     }
                     
-            })
+                })
+            }
         }
+
         group.notify(queue: .main){
             self.theTableView.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
             self.theTableView.dataSource = self

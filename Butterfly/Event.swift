@@ -24,6 +24,7 @@ class Event: NSObject, MKAnnotation {
         self.eventId = eventId
         self.locationName = title
         self.inviteList = inviteList
+        self.open = open
         super.init()
     }
     
