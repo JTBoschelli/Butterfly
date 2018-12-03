@@ -75,6 +75,7 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         var selectedSong = songs[indexPath.row] + " - " + artists[indexPath.row]
         selectedSong = selectedSong.replacingOccurrences(of: "+", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: "/", with: "")
         selectedSong = selectedSong.replacingOccurrences(of: "#", with: "")
         selectedSong = selectedSong.replacingOccurrences(of: ".", with: "")
         selectedSong = selectedSong.replacingOccurrences(of: "[", with: "")
@@ -105,6 +106,7 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Songs"
         searchResultsView.dataSource = self
         searchResultsView.delegate = self
         playlistView.dataSource = self
