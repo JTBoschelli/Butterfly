@@ -97,7 +97,12 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
         searchResultsView.delegate = self
         playlistView.dataSource = self
         playlistView.delegate = self
+        getPlaylist()
         // Do any additional setup after loading the view.
+    }
+    
+    func getPlaylist() {
+        
     }
 
     override func didReceiveMemoryWarning() {
