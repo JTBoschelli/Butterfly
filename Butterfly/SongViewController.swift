@@ -28,7 +28,9 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
-
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        
+    }
     
     @IBOutlet weak var searchBar: UISearchBar!
     var songs:[String] = []
@@ -36,32 +38,28 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     var searchQuery:String? = nil
     var lastSearch:String? = nil
     var eventId:String! = ""
+    var selectedSong:String! = ""
     @IBOutlet weak var searchResultsView: UITableView!
     
     @objc func addToPlaylist(){
-        let user = Auth.auth().currentUser
-        if let eventCreator = user{
-            let uid = eventCreator.uid
-            let creator = eventCreator.displayName! as NSString
-            var ref: DatabaseReference!
-            ref = Database.database().reference()
-            print(creator)
-            let eventDetails:[String : AnyObject] = ["Title": eventName, "Date": eventDate, "Creator": creator, "CreatorId": uid as AnyObject, "Latitude": eventLatitude, "Longitude": eventLongitude, "Open": "false" as NSString]
-            let detailedVC = EventInviteViewController()
-            detailedVC.event = eventDetails
-            navigationController?.pushViewController(detailedVC, animated: true)
-        }
-        else{
-            //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
-            
-            let alertController = UIAlertController(title: "ERROR", message: "Must be logged in to create event", preferredStyle: .alert)
-            
-            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alertController.addAction(defaultAction)
-            
-            present(alertController, animated: true, completion: nil)
+        var ref: DatabaseReference!
+        ref = Database.database().reference()
+        //Code to update child values taken from firebase docs on https://firebase.google.com/docs/database/ios/read-and-write
+        let childUpdates:[String: AnyObject] = ["/events/\(eventId)/song-list/\(selectedSong)": "true" as NSString]
+        ref.updateChildValues(childUpdates){
             //End of Citation
-            return
+            (error:Error?, ref:DatabaseReference) in
+            if let error = error {
+                print("Data could not be saved: \(error).")
+            } else {
+                //Syntax to create an alert controller derived from example on https://www.appcoda.com/uialertcontroller-swift-closures-enum/
+                let alertController = UIAlertController(title: "Success!", message: "Song Added Successfully", preferredStyle: .alert)
+                let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(defaultAction)
+                self.present(alertController, animated: true, completion: nil)
+                self.navigationController?.popViewController(animated: true)
+                //End of Citation
+            }
         }
     }
     

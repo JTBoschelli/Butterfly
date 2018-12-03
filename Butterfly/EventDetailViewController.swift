@@ -31,6 +31,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     var long:Double
     var invites:[String:String]
     var eventId:String
+    let open:String?
    // let coordinate = CLLocationCoordinate2DMake(lat, long)
     
     required init?(coder aDecoder: NSCoder) {
