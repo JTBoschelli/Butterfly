@@ -30,10 +30,11 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     var lat:Double
     var long:Double
     var invites:[String:String]
-    var open:String
+    var eventId:String
    // let coordinate = CLLocationCoordinate2DMake(lat, long)
     
     required init?(coder aDecoder: NSCoder) {
+        eventId = ""
         name = ""
         date = ""
         lat = 0.0
@@ -130,7 +131,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destination = segue.destination as? SongViewController
-        destination?.eventId = uid
+        destination?.eventId = eventId
     }
     
 
