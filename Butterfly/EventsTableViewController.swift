@@ -73,7 +73,7 @@ class EventsTableViewController: UIViewController, UITableViewDataSource, UITabl
         destination?.lat = eventsArray[index.row].coordinate.latitude
         destination?.invites = eventsArray[index.row].inviteList!
         destination?.eventId = eventsArray[index.row].eventId!
-        destination?.open = eventsArray[index.row].eventId!
+        destination?.open = eventsArray[index.row].open!
     }
     
     

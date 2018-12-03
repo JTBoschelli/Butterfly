@@ -89,6 +89,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         ref = Database.database().reference()
         print(self.open!)
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         if (self.open! == "false"){
             for key in userKeyArray{
                 group.enter()
