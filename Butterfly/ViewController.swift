@@ -159,7 +159,7 @@ class ViewController: UIViewController, LoginButtonDelegate, UITableViewDelegate
         inviteTableView.dataSource = self
         
         if let user = Auth.auth().currentUser{
-            loadTableData(isIn:true, userName: user.displayName!)
+            //loadTableData(isIn:true, userName: user.displayName!)
             accountHeader.text = "Welcome, \(user.displayName!)"
         }
         // Do any additional setup after loading the view, typically from a nib.
