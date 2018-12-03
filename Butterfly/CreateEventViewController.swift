@@ -8,8 +8,10 @@
 import UIKit
 import FirebaseDatabase
 import FirebaseAuth
+import MapKit
 
-class CreateEventViewController: UIViewController {
+
+class CreateEventViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet var eventTitle: UITextField!
     @IBOutlet var eventDatePicker: UIDatePicker!
@@ -17,6 +19,44 @@ class CreateEventViewController: UIViewController {
     @IBOutlet var eventLong: UITextField!
     @IBOutlet var eventOpen: UISwitch!
     
+    var location: CLLocation? = nil
+    var locationManager:CLLocationManager!
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        determineCurrentLocation()
+        
+    }
+    
+    
+    func determineCurrentLocation()
+    {
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let userLocation:CLLocation = locations[0] as CLLocation
+        // Call stopUpdatingLocation() to stop listening for location updates,
+        // other wise this function will be called every time when user location changes.
+        //manager.stopUpdatingLocation()
+        
+        location = userLocation
+        eventLat.text = String(format: "%f", (location?.coordinate.latitude)!)
+        eventLong.text = String(format:"%f", (location?.coordinate.longitude)!)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
+    {
+        print("Error \(error)")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Create Event"
