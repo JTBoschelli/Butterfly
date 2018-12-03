@@ -85,6 +85,8 @@ class EventInviteViewController: UIViewController, UITableViewDelegate, UITableV
         event["invite-list"] = inviteList as AnyObject
         
         
+        
+        
         //Code to update child values taken from firebase docs on https://firebase.google.com/docs/database/ios/read-and-write
         let key = ref.child("events").childByAutoId().key
         
@@ -108,6 +110,18 @@ class EventInviteViewController: UIViewController, UITableViewDelegate, UITableV
                 //End of Citation
             }
         }
+        
+        for i in 0 ..< selectedUsers.count{
+            let uid = selectedUsers[i]
+            let userInviteChild:[String : AnyObject] = ["/users/\(uid)/invites//\(key!)/\(event["Title"]!)": "true" as NSString]
+            ref.updateChildValues(userInviteChild){
+                (error:Error?, ref:DatabaseReference) in
+                if let error = error {
+                    print("Data could not be saved: \(error).")
+                } 
+            }
+        }
+
     }
     
     
