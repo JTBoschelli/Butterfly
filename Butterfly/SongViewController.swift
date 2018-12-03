@@ -24,7 +24,10 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == searchResultsView{
             let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-            cell.textLabel!.text = songs[indexPath.item]+" - "+artists[indexPath.item]
+            let subview = UILabel(frame: CGRect(x: cell.frame.minX, y: cell.frame.minY, width: 300, height: cell.frame.height))
+            subview.text = songs[indexPath.item]+" - "+artists[indexPath.item]
+            subview.numberOfLines = 0
+            cell.addSubview(subview)
             let buttonView = CGRect(x: cell.frame.maxX, y: cell.frame.minY, width: cell.frame.height, height: cell.frame.height)
             let button = UIButton(frame: buttonView)
             button.setTitle("add", for: UIControlState.normal)
@@ -36,6 +39,7 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
         else{
             let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
             cell.textLabel!.text = databaseSongs[indexPath.item]
+            cell.textLabel!.numberOfLines = 0
             return cell
         }
     }
