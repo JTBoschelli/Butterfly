@@ -149,6 +149,7 @@
                         <viewLayoutGuide key="safeArea" id="XEs-G4-5C6"/>
                     </view>
                     <connections>
+                        <outlet property="playlistView" destination="Q87-bc-QSJ" id="FYH-fz-Zz4"/>
                         <outlet property="searchBar" destination="QdK-38-vZS" id="Fnk-Rd-UDS"/>
                         <outlet property="searchResultsView" destination="gpe-mq-rQk" id="xo3-Zj-50D"/>
                     </connections>

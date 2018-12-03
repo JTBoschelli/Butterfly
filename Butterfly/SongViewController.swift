@@ -13,19 +13,31 @@ import FirebaseAuth
 class SongViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return songs.count
+        if tableView == searchResultsView{
+            return songs.count
+        }
+        else{
+            return databaseSongs.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-        cell.textLabel!.text = songs[indexPath.item]+" - "+artists[indexPath.item]
-        let buttonView = CGRect(x: cell.frame.maxX, y: cell.frame.minY, width: cell.frame.height, height: cell.frame.height)
-        let button = UIButton(frame: buttonView)
-        button.setTitle("add", for: UIControlState.normal)
-        button.setTitleColor(UIColor.black, for: .normal)
-        button.addTarget(self, action: #selector(addToPlaylist), for: .touchUpInside)
-        cell.addSubview(button)
-        return cell
+        if tableView == searchResultsView{
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+            cell.textLabel!.text = songs[indexPath.item]+" - "+artists[indexPath.item]
+            let buttonView = CGRect(x: cell.frame.maxX, y: cell.frame.minY, width: cell.frame.height, height: cell.frame.height)
+            let button = UIButton(frame: buttonView)
+            button.setTitle("add", for: UIControlState.normal)
+            button.setTitleColor(UIColor.black, for: .normal)
+            button.addTarget(self, action: #selector(addToPlaylist), for: .touchUpInside)
+            cell.addSubview(button)
+            return cell
+        }
+        else{
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+            cell.textLabel!.text = databaseSongs[indexPath.item]
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -41,6 +53,7 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     var selectedSong:String! = ""
     var databaseSongs:[String] = []
     @IBOutlet weak var searchResultsView: UITableView!
+    @IBOutlet weak var playlistView: UITableView!
     
     @objc func addToPlaylist(_ sender: UIButton){
         //finding selected button from https://forums.developer.apple.com/thread/67265
@@ -82,6 +95,8 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         searchResultsView.dataSource = self
         searchResultsView.delegate = self
+        playlistView.dataSource = self
+        playlistView.delegate = self
         // Do any additional setup after loading the view.
     }
 
