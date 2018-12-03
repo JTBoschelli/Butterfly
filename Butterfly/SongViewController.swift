@@ -13,19 +13,35 @@ import FirebaseAuth
 class SongViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return songs.count
+        if tableView == searchResultsView{
+            return songs.count
+        }
+        else{
+            return databaseSongs.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-        cell.textLabel!.text = songs[indexPath.item]+" - "+artists[indexPath.item]
-        let buttonView = CGRect(x: cell.frame.maxX, y: cell.frame.minY, width: cell.frame.height, height: cell.frame.height)
-        let button = UIButton(frame: buttonView)
-        button.setTitle("add", for: UIControlState.normal)
-        button.setTitleColor(UIColor.black, for: .normal)
-        button.addTarget(self, action: #selector(addToPlaylist), for: .touchUpInside)
-        cell.addSubview(button)
-        return cell
+        if tableView == searchResultsView{
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+            let subview = UILabel(frame: CGRect(x: cell.frame.minX+15, y: cell.frame.minY, width: 300, height: cell.frame.height))
+            subview.text = songs[indexPath.item]+" - "+artists[indexPath.item]
+            subview.numberOfLines = 0
+            cell.addSubview(subview)
+            let buttonView = CGRect(x: cell.frame.maxX, y: cell.frame.minY, width: cell.frame.height, height: cell.frame.height)
+            let button = UIButton(frame: buttonView)
+            button.setTitle("add", for: UIControlState.normal)
+            button.setTitleColor(UIColor.blue, for: .normal)
+            button.addTarget(self, action: #selector(addToPlaylist), for: .touchUpInside)
+            cell.addSubview(button)
+            return cell
+        }
+        else{
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+            cell.textLabel!.text = databaseSongs[indexPath.item]
+            cell.textLabel!.numberOfLines = 0
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -41,6 +57,7 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     var selectedSong:String! = ""
     var databaseSongs:[String] = []
     @IBOutlet weak var searchResultsView: UITableView!
+    @IBOutlet weak var playlistView: UITableView!
     
     @objc func addToPlaylist(_ sender: UIButton){
         //finding selected button from https://forums.developer.apple.com/thread/67265
@@ -56,7 +73,13 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
             print("failed to get index path for cell containing button")
             return
         }
-        let selectedSong = songs[indexPath.row] + " - " + artists[indexPath.row]
+        var selectedSong = songs[indexPath.row] + " - " + artists[indexPath.row]
+        selectedSong = selectedSong.replacingOccurrences(of: "+", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: "#", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: ".", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: "[", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: "]", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: "$", with: "S")
         var ref: DatabaseReference!
         ref = Database.database().reference()
         //Code to update child values taken from firebase docs on https://firebase.google.com/docs/database/ios/read-and-write
@@ -74,16 +97,38 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.present(alertController, animated: true, completion: nil)
                 self.navigationController?.popViewController(animated: true)
                 //End of Citation
+                self.getPlaylist()
             }
         }
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         searchResultsView.dataSource = self
         searchResultsView.delegate = self
+        playlistView.dataSource = self
+        playlistView.delegate = self
+        getPlaylist()
         // Do any additional setup after loading the view.
     }
+    
+    func getPlaylist() {
+        databaseSongs = []
+        var ref: DatabaseReference!
+        ref = Database.database().reference()
+        ref.child("events").child(eventId).child("song-list").observeSingleEvent(of: .value, with: {
+            snapshot in
+            if let someData = snapshot.value as? Dictionary<String, String>{
+                for (key, _) in someData{
+                    self.databaseSongs.append(key)
+                }
+                self.playlistView.reloadData()
+            }
+        })
+        
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
