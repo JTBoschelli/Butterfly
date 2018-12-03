@@ -146,8 +146,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 let coordinate = CLLocationCoordinate2DMake(lat, long)
                 let inviteList = value["invite-list"] as? [String:String] ?? ["No List":"true"]
                 let newEvent = Event(title: value["Title"]! as! String, locationName: value["Title"]! as! String, eventId: key, date: value["Date"]! as! String, coordinate: coordinate, inviteList: inviteList, open: value["Open"]! as! String)
-                print(newEvent.open)
-                var open:String = value["Open"]! as! String
+                let open:String = value["Open"]! as! String
                 if(open == "true"){
                     self.mapView.addAnnotation(newEvent)
                     self.eventsArray.append(newEvent)
