@@ -24,14 +24,14 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == searchResultsView{
             let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-            let subview = UILabel(frame: CGRect(x: cell.frame.minX, y: cell.frame.minY, width: 300, height: cell.frame.height))
+            let subview = UILabel(frame: CGRect(x: cell.frame.minX+15, y: cell.frame.minY, width: 300, height: cell.frame.height))
             subview.text = songs[indexPath.item]+" - "+artists[indexPath.item]
             subview.numberOfLines = 0
             cell.addSubview(subview)
             let buttonView = CGRect(x: cell.frame.maxX, y: cell.frame.minY, width: cell.frame.height, height: cell.frame.height)
             let button = UIButton(frame: buttonView)
             button.setTitle("add", for: UIControlState.normal)
-            button.setTitleColor(UIColor.black, for: .normal)
+            button.setTitleColor(UIColor.blue, for: .normal)
             button.addTarget(self, action: #selector(addToPlaylist), for: .touchUpInside)
             cell.addSubview(button)
             return cell
@@ -73,7 +73,13 @@ class SongViewController: UIViewController, UITableViewDelegate, UITableViewData
             print("failed to get index path for cell containing button")
             return
         }
-        let selectedSong = songs[indexPath.row] + " - " + artists[indexPath.row]
+        var selectedSong = songs[indexPath.row] + " - " + artists[indexPath.row]
+        selectedSong = selectedSong.replacingOccurrences(of: "+", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: "#", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: ".", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: "[", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: "]", with: "")
+        selectedSong = selectedSong.replacingOccurrences(of: "$", with: "S")
         var ref: DatabaseReference!
         ref = Database.database().reference()
         //Code to update child values taken from firebase docs on https://firebase.google.com/docs/database/ios/read-and-write
