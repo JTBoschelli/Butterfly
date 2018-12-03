@@ -31,7 +31,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     var long:Double
     var invites:[String:String]
     var eventId:String
-    let open:String?
+    var open:String?
    // let coordinate = CLLocationCoordinate2DMake(lat, long)
     
     required init?(coder aDecoder: NSCoder) {
@@ -88,7 +88,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         var ref: DatabaseReference!
         
         ref = Database.database().reference()
-        if (self.open == "false"){
+        print(self.open!)
+        if (self.open! == "false"){
             for key in userKeyArray{
                 group.enter()
                 ref.child("users").child(key).child("name").observeSingleEvent(of: .value, with: {
@@ -100,9 +101,12 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
                     
                 })
             }
+
+            
         }
 
         group.notify(queue: .main){
+
             self.theTableView.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
             self.theTableView.dataSource = self
             self.theTableView.delegate = self

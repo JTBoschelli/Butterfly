@@ -125,6 +125,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 destination?.long = event.coordinate.longitude
                 destination?.invites = event.inviteList!
                 destination?.eventId = event.eventId!
+                destination?.open = event.open!
             }
         }
         
