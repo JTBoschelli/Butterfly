@@ -106,7 +106,6 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         }
 
         group.notify(queue: .main){
-            print(self.invitedPeople)
 
             self.theTableView.register(UITableViewCell.self, forCellReuseIdentifier: "myCell")
             self.theTableView.dataSource = self
