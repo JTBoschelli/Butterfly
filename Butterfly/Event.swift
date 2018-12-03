@@ -15,11 +15,13 @@ class Event: NSObject, MKAnnotation {
     let locationName: String
     let coordinate: CLLocationCoordinate2D
     let inviteList: [String:String]?
+    let eventId: String?
     
-    init(title: String,locationName:String,  date:String, coordinate: CLLocationCoordinate2D,inviteList:[String:String]?) {
+    init(title: String,locationName:String, eventId:String,  date:String, coordinate: CLLocationCoordinate2D,inviteList:[String:String]?) {
         self.title = title
         self.coordinate = coordinate
         self.date = date
+        self.eventId = eventId
         self.locationName = title
         self.inviteList = inviteList
         super.init()
